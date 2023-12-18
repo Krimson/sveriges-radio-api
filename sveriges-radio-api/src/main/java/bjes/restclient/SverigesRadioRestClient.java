@@ -1,5 +1,7 @@
 package bjes.restclient;
 
+import bjes.restclient.filter.ClientRequestLoggingFilter;
+import bjes.restclient.filter.ClientResponseLoggingFilter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
@@ -24,7 +26,9 @@ public class SverigesRadioRestClient {
         jacksonJsonProvider.setMapper(mapper);
 
         this.defaultClient = ClientBuilder.newClient()
-                .register(jacksonJsonProvider);
+                .register(jacksonJsonProvider)
+                .register(ClientRequestLoggingFilter.class)
+                .register(ClientResponseLoggingFilter.class);
     }
 
     public WebTarget getDefaultClient() {
