@@ -3,6 +3,8 @@ services:
   sveriges-radio-api:
     mem_limit: 1024m
     mem_reservation: 1024M
-    image: 259233288424.dkr.ecr.eu-north-1.amazonaws.com/bjes/sveriges-radio-api:23.12.0-SNAPSHOT
+    image: 259233288424.dkr.ecr.eu-north-1.amazonaws.com/bjes/sveriges-radio-api:23.12.1-SNAPSHOT
+    environment:
+      - LOG_LEVEL=trace
     ports:
       - "127.0.0.1:8050:8085"

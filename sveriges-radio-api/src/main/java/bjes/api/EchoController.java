@@ -1,6 +1,7 @@
 package bjes.api;
 
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @Path("echo")
+@Tag(name = "Echo API")
 public class EchoController {
 
     @GET

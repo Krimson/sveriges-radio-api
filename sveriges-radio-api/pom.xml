@@ -3,13 +3,12 @@
     <parent>
         <artifactId>sveriges-radio</artifactId>
         <groupId>bjes</groupId>
-        <version>23.12.0-SNAPSHOT</version>
+        <version>23.12.1-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <name>Sveriges Radio API</name>
-    <description> <![CDATA[API for Sveriges Radio. <br /> <br /> Fetch radio programs <br />]]>
-    </description>
+    <description><![CDATA[API for Sveriges Radio. <br /> <br /> Fetch radio programs <br />]]></description>
     <artifactId>sveriges-radio-api</artifactId>
 
     <properties>
@@ -17,6 +16,10 @@
         <spring-boot.version>3.2.0</spring-boot.version>
         <dockerfile-maven-version>1.4.13</dockerfile-maven-version>
         <project.repo>259233288424.dkr.ecr.eu-north-1.amazonaws.com/bjes/sveriges-radio-api</project.repo>
+        <swagger.ui.version>5.10.5</swagger.ui.version>
+        <swagger.version>2.2.19</swagger.version>
+        <lombok.version>1.18.30</lombok.version>
+        <springdoc-api.version>2.3.0</springdoc-api.version>
     </properties>
 
     <dependencies>
@@ -24,6 +27,26 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jersey</artifactId>
             <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-jaxrs2-jakarta</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations-jakarta</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc-api.version}</version>
         </dependency>
     </dependencies>
 
@@ -72,6 +95,64 @@
                     </buildArgs>
                 </configuration>
             </plugin>
+            <plugin> <!-- Swagger -->
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <id>swagger-ui</id>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>
+                                https://github.com/swagger-api/swagger-ui/archive/v${swagger.ui.version}.tar.gz
+                            </url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.build.directory}
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <sequential>
+                                    <echo>Copy Files</echo>
+                                    <copy todir="${project.build.directory}/classes/static">
+                                        <fileset dir="${project.build.directory}/swagger-ui-${swagger.ui.version}/dist">
+                                            <include name="**" />
+                                        </fileset>
+                                    </copy>
+                                    <echo>Renaming 'index.html' to 'swagger-ui.html'</echo>
+                                    <move file="${project.build.directory}/classes/static/index.html" tofile="${project.build.directory}/classes/static/swagger-ui.html" />
+                                    <echo>Replace petstore swagger.json link</echo>
+                                    <replace token="https://petstore.swagger.io/v2/swagger.json" value="openapi.json" dir="${project.build.directory}/classes/static">
+                                        <include name="swagger-ui.html" />
+                                    </replace>
+                                </sequential>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 </project>
