@@ -5,7 +5,7 @@
     <artifactId>sveriges-radio</artifactId>
     <packaging>pom</packaging>
     <name>Sveriges Radio</name>
-    <version>23.12.1-SNAPSHOT</version>
+    <version>23.12.2-SNAPSHOT</version>
     <modules>
         <module>sveriges-radio-api</module>
     </modules>

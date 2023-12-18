@@ -1,6 +1,7 @@
 package bjes.config;
 
 import bjes.api.EchoController;
+import bjes.api.SverigesRadioController;
 import io.swagger.v3.jaxrs2.SwaggerSerializers;
 import io.swagger.v3.jaxrs2.integration.JaxrsOpenApiContextBuilder;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
@@ -43,6 +44,7 @@ public class JerseyConfig extends ResourceConfig {
 
     private void registerEndpoints() {
         register(EchoController.class);
+        register(SverigesRadioController.class);
     }
 
     public void configureSwagger() {
