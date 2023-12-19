@@ -1,4 +1,4 @@
-package bjes.models;
+package bjes.models.sr;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,5 +9,5 @@ import java.util.List;
 @NoArgsConstructor
 public class TrackListResponseDTO {
     String copyright;
-    List<SongDTO> song;
+    List<SongResponseDTO> song;
 }

@@ -1,7 +1,7 @@
 package bjes.service;
 
-import bjes.models.SongDTO;
-import bjes.models.TrackListResponseDTO;
+import bjes.models.sr.SongResponseDTO;
+import bjes.models.sr.TrackListResponseDTO;
 import bjes.restclient.SrApiEndpoints;
 import bjes.restclient.SverigesRadioRestClient;
 import jakarta.ws.rs.client.WebTarget;
@@ -23,7 +23,7 @@ public class TrackListService {
         return restClient.getDefaultClient();
     }
 
-    public List<SongDTO> fetchTrackList(String channelid, String size, String startDate) {
+    public TrackListResponseDTO fetchTrackList(String channelid, String size, String startDate) {
         Response resp = target()
                 .path(SrApiEndpoints.CONTEXT_PATH + SrApiEndpoints.GET_PLAYLIST_BY_CHANNEL)
                 .queryParam("id", channelid)
@@ -35,6 +35,6 @@ public class TrackListService {
                 .get();
         TrackListResponseDTO responseWrapper = resp.readEntity(TrackListResponseDTO.class);
 
-        return responseWrapper != null && responseWrapper.getSong() != null ? responseWrapper.getSong() : new ArrayList<>();
+        return responseWrapper;
     }
 }

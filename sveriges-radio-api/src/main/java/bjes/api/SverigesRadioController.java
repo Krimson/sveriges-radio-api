@@ -1,7 +1,10 @@
 package bjes.api;
 
+import bjes.mapstruct.RadioMapper;
 import bjes.models.ChannelEnum;
-import bjes.models.SongDTO;
+import bjes.models.SongsByRecordLabelDTO;
+import bjes.models.sr.SongResponseDTO;
+import bjes.models.sr.TrackListResponseDTO;
 import bjes.service.TrackListService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,6 +24,9 @@ public class SverigesRadioController {
     @Autowired
     TrackListService trackListService;
 
+    @Autowired
+    RadioMapper radioMapper;
+
     @GET
     @Path(ApiEndpoints.FETCH_TRACK_LIST)
     @Produces(MediaType.APPLICATION_JSON)
@@ -29,7 +35,10 @@ public class SverigesRadioController {
     public Response fetchTrackListByChannelId(@PathParam("channel") ChannelEnum channel,
                                                    @QueryParam("size") @DefaultValue("5") String size,
                                                    @QueryParam("date") @DefaultValue("2023-12-18") String date) {
-        List<SongDTO> songDTOList = trackListService.fetchTrackList(channel.getChannelId(), size, date);
-        return Response.ok(songDTOList).type(MediaType.APPLICATION_JSON).build();
+        TrackListResponseDTO trackListResponseDTO = trackListService.fetchTrackList(channel.getChannelId(), size, date);
+
+        List<SongsByRecordLabelDTO> songsByRecordLabelDTOList = radioMapper.mapSongsSortedByRecordLabel(trackListResponseDTO);
+
+        return Response.ok(songsByRecordLabelDTOList).type(MediaType.APPLICATION_JSON).build();
     }
 }

@@ -3,7 +3,7 @@
     <parent>
         <artifactId>sveriges-radio</artifactId>
         <groupId>bjes</groupId>
-        <version>23.12.3-SNAPSHOT</version>
+        <version>23.12.4-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -20,6 +20,7 @@
         <swagger.version>2.2.19</swagger.version>
         <lombok.version>1.18.30</lombok.version>
         <springdoc-api.version>2.3.0</springdoc-api.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
     </properties>
 
     <dependencies>
@@ -47,6 +48,16 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
         </dependency>
     </dependencies>
 
