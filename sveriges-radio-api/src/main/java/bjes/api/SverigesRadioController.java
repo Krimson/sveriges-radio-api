@@ -33,11 +33,16 @@ public class SverigesRadioController {
     @Operation(summary = "Fetch the track list from a channel",
             description = "")
     public Response fetchTrackListByChannelId(@PathParam("channel") ChannelEnum channel,
-                                                   @QueryParam("size") @DefaultValue("5") String size,
-                                                   @QueryParam("date") @DefaultValue("2023-12-18") String date) {
+                                              @QueryParam("size") @DefaultValue("5") String size,
+                                              @QueryParam("date") @DefaultValue("2023-12-18") String date,
+                                              @QueryParam("artists-only") @DefaultValue("false") String artistsOnly) {
         TrackListResponseDTO trackListResponseDTO = trackListService.fetchTrackList(channel.getChannelId(), size, date);
 
         List<SongsByRecordLabelDTO> songsByRecordLabelDTOList = radioMapper.mapSongsSortedByRecordLabel(trackListResponseDTO);
+
+        if(artistsOnly != null && artistsOnly.equals("true")) {
+            return Response.ok(radioMapper.mapArtistsByRecordLabelList(songsByRecordLabelDTOList)).type(MediaType.APPLICATION_JSON).build();
+        }
 
         return Response.ok(songsByRecordLabelDTOList).type(MediaType.APPLICATION_JSON).build();
     }

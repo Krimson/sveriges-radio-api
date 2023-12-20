@@ -1,5 +1,6 @@
 package bjes.mapstruct;
 
+import bjes.models.ArtistsByRecordLabelDTO;
 import bjes.models.Song;
 import bjes.models.sr.SongResponseDTO;
 import bjes.models.SongsByRecordLabelDTO;
@@ -11,6 +12,7 @@ import org.mapstruct.Mapping;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring",
         injectionStrategy = InjectionStrategy.CONSTRUCTOR)
@@ -43,4 +45,18 @@ public interface RadioMapper {
         }
         return songsByRecordLabelDTOList;
     }
+
+
+    default ArtistsByRecordLabelDTO mapArtistsByRecordLabel(SongsByRecordLabelDTO songsByRecordLabelDTO) {
+        if(songsByRecordLabelDTO == null || songsByRecordLabelDTO.getSongs() == null) {
+            return null;
+        }
+        ArtistsByRecordLabelDTO artistsByRecordLabelDTO = new ArtistsByRecordLabelDTO();
+        artistsByRecordLabelDTO.setRecordLabel(songsByRecordLabelDTO.getRecordLabel());
+        artistsByRecordLabelDTO.setArtists(songsByRecordLabelDTO.getSongs().stream().map(Song::getArtist).collect(Collectors.toSet()));
+        return artistsByRecordLabelDTO; 
+    }
+
+    List<ArtistsByRecordLabelDTO> mapArtistsByRecordLabelList(List<SongsByRecordLabelDTO> songsByRecordLabelDTOList);
+
 }
